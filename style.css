@@ -817,12 +817,9 @@ input:focus, select:focus, textarea:focus {
 }
 
 .footer-bottom {
-  margin-top: 40px;
-  text-align: center;
-  color: #6f7b86;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 20px;   /* reduced */
+  padding-top: 10px;  /* reduced */
+  padding-bottom: 0;  /* remove extra bottom space */
 }
 
 /* =========================
