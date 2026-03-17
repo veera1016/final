@@ -1140,3 +1140,9 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
     display: none;
   }
 }
+
+.address-box {
+  max-width: 400px;   /* controls width */
+  margin: 0 auto;     /* centers horizontally */
+  text-align: center; /* centers text */
+}
