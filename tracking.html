@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Live Tracking | SKY EXPRESS</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Outfit:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <style>
+    :root {
+      --primary: #0061ff;
+      --navy: #1a2a6c;
+      --accent: #ff7300;
+      --bg: #f8fbff;
+      --card: #ffffff;
+      --text: #2d3436;
+      --border: #f1f4f8;
+      --success: #00b894;
+    }
+
+    body { background: var(--bg); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; color: var(--text); -webkit-font-smoothing: antialiased; }
+    .centered-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+    /* Header */
+    .site-nav { background: white; padding: 18px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 1000; }
+    .brand { text-decoration: none; display: flex; align-items: center; gap: 12px; }
+    .m-title { font-family: 'Outfit'; font-weight: 900; color: var(--navy); font-size: 1.5rem; letter-spacing: -0.5px; }
+
+    .tracking-wrapper { padding: 60px 0; min-height: 85vh; }
+
+    /* Status Card */
+    .status-card {
+      background: var(--card);
+      border-radius: 35px;
+      box-shadow: 0 30px 70px rgba(26, 42, 108, 0.08);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .card-head {
+      background: linear-gradient(135deg, var(--navy), var(--primary));
+      padding: 45px 40px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .awb-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; }
+    .awb-val { margin: 0; font-family: 'Outfit'; font-size: 2.6rem; letter-spacing: -1px; }
+
+    /* Live Badge */
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: #f0f7ff;
+      padding: 24px 35px;
+      margin: 35px;
+      border-radius: 22px;
+      border-left: 8px solid var(--primary);
+    }
+
+    .pulse-ring {
+      width: 14px; height: 14px; background: var(--primary); border-radius: 50%; position: relative;
+    }
+    .pulse-ring::after {
+      content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%;
+      background: var(--primary); animation: ripple 1.8s infinite ease-in-out;
+    }
+
+    @keyframes ripple { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(3.5); opacity: 0; } }
+
+    /* Data Grid - 5 items matching admin fields */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 0 35px 40px;
+    }
+
+    .data-item {
+      padding: 22px; background: #fcfdfe; border-radius: 20px;
+      border: 1px solid var(--border); transition: all 0.3s ease;
+    }
+    .data-item:hover { border-color: var(--primary); transform: translateY(-3px); }
+
+    .data-item small { display: block; text-transform: uppercase; font-weight: 800; font-size: 0.65rem; color: #8395a7; margin-bottom: 10px; letter-spacing: 1px; }
+    .data-item span { font-weight: 800; color: var(--navy); font-size: 1.15rem; line-height: 1.2; }
+
+    /* Timeline */
+    .timeline-box { padding: 40px 35px 60px; border-top: 1px solid var(--border); background: #fafbfc; }
+    .timeline-title { font-family: 'Outfit'; font-size: 1.5rem; color: var(--navy); margin-bottom: 40px; display: flex; align-items: center; gap: 12px; }
+
+    .timeline { position: relative; padding-left: 45px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 17px; top: 10px; bottom: 10px; width: 3px; background: #e2e8f0;
+    }
+
+    .t-item { position: relative; margin-bottom: 45px; }
+    .t-item::after {
+      content: ''; position: absolute; left: -35px; top: 5px; width: 14px; height: 14px;
+      background: white; border: 4px solid #cbd5e0; border-radius: 50%; z-index: 2;
+    }
+    .t-item.latest::after { background: var(--primary); border-color: #d1e3ff; transform: scale(1.3); }
+
+    .t-date { font-weight: 800; color: var(--primary); font-size: 0.9rem; margin-bottom: 12px; display: block; }
+    .t-content { background: white; padding: 20px 25px; border-radius: 18px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+    .t-content h5 { margin: 0; font-size: 1.1rem; color: var(--navy); font-weight: 800; }
+    .t-content p { margin: 8px 0 0; color: #576574; font-size: 0.95rem; }
+
+    .btn-action {
+      display: inline-flex; align-items: center; gap: 12px; background: var(--navy);
+      color: white; text-decoration: none; padding: 18px 40px; border-radius: 60px;
+      font-weight: 800; margin-top: 40px; transition: 0.3s;
+    }
+    .btn-action:hover { background: var(--primary); transform: translateY(-2px); }
+
+    @media (max-width: 768px) {
+      .card-head { flex-direction: column; text-align: center; gap: 25px; }
+      .data-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="centered-container"><a href="index.html" class="brand"><span class="m-title">SKY EXPRESS</span></a></div>
+  </nav>
+
+  <main class="tracking-wrapper">
+    <div class="centered-container">
+      <div class="status-card">
+        
+        <div id="loader" style="padding: 120px 0; text-align: center;">
+          <i class="fas fa-circle-notch fa-spin" style="font-size: 3.5rem; color: var(--primary);"></i>
+          <p style="margin-top: 30px; font-weight: 700; color: var(--navy);">Fetching Live Shipment Data...</p>
+        </div>
+
+        <div id="main-content" style="display:none;">
+          <div class="card-head">
+            <div>
+              <div class="awb-label">Tracking Shipment</div>
+              <h2 id="awb-display" class="awb-val">---</h2>
+            </div>
+            <i class="fas fa-shipping-fast" style="font-size: 3.5rem; opacity: 0.4;"></i>
+          </div>
+
+
+          <div class="data-grid">
+            <div class="data-item"><small>Sender (Shipper)</small><span id="val-sender">---</span></div>
+            <div class="data-item"><small>Forwarding Number</small><a id="val-forward" target="_blank" style="word-break: break-all;"></a></div>
+            <div class="data-item"><small>Consignee (Receiver)</small><span id="val-receiver">---</span></div>
+            <div class="data-item"><small>Destination</small><span id="val-dest">---</span></div>
+            <div class="data-item"><small>Booking Date</small><span id="val-book">---</span></div>
+            <div class="data-item"><small>Delivery Date (Est.)</small><span id="val-delivery-date" style="color: var(--success);">---</span></div>
+          </div>
+
+          <div class="timeline-box">
+            <h4 class="timeline-title"><i class="fas fa-history"></i> Detailed Journey Timeline</h4>
+            <div id="timeline-flow" class="timeline"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align: center;">
+        <a href="index.html" class="btn-action"><i class="fas fa-search"></i> Track Another</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyTowBhmWH_zFm6Q9C_0Ew1ZLkuHrhf8JWgwqgmCFawi7W6SQUEcbPEVK7id-HmnqK2/exec";
+
+    // helper to fix "2026-03-03T18:30:00.000Z" to "Mar 03, 2026"
+    function cleanDateFormat(dateStr) {
+      if (!dateStr || dateStr === '---' || dateStr === 'undefined') return 'Not Set';
+      try {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return dateStr;
+        return date.toLocaleDateString('en-GB', {
+          day: '2-digit', month: 'short', year: 'numeric'
+        });
+      } catch (e) { return dateStr; }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const trackId = urlParams.get('id')?.toUpperCase().trim();
+      if (!trackId) { window.location.href = 'index.html'; return; }
+
+      document.getElementById('awb-display').innerText = trackId;
+
+      try {
+        const response = await fetch(`${API_URL}?id=${trackId}`);
+        const data = await response.json();
+        document.getElementById('loader').style.display = 'none';
+
+        if (data && !data.error) {
+          document.getElementById('main-content').style.display = 'block';
+          
+          // Data Mapping matching your admin screenshot
+          document.getElementById('val-sender').innerText = data.sender || '---';
+          const forwardLink = document.getElementById('val-forward');
+
+          if (data.forwardingNumber) {
+
+          if (data.forwardingNumber.startsWith("http")) {
+          forwardLink.href = data.forwardingNumber;
+          forwardLink.innerText = data.forwardingNumber;
+          } else {
+          forwardLink.innerText = data.forwardingNumber;
+          }
+
+          } else {
+          forwardLink.innerText = "---";
+          }
+          document.getElementById('val-receiver').innerText = data.consignee || '---';
+          document.getElementById('val-dest').innerText = data.dest || '---';
+          
+          // formatting fixed dates
+          document.getElementById('val-book').innerText = cleanDateFormat(data.bookingDate);
+          document.getElementById('val-delivery-date').innerText = cleanDateFormat(data.deliveryDate || data.eta);
+          
+
+          // Timeline Injection
+          const flow = document.getElementById('timeline-flow');
+          if (data.history && data.history.length > 0) {
+            [...data.history].reverse().forEach((event, index) => {
+              const div = document.createElement('div');
+              div.className = `t-item ${index === 0 ? 'latest' : ''}`;
+              div.innerHTML = `
+                <span class="t-date">${cleanDateFormat(event.date)} | ${event.time}</span>
+                <div class="t-content">
+                  <h5>${event.loc}</h5>
+                  <p>${event.act}</p>
+                </div>`;
+              flow.appendChild(div);
+            });
+          } else {
+              flow.innerHTML = '<p style="text-align:center; padding:20px; opacity:0.5;">Processing shipment initial records...</p>';
+          }
+        } else {
+          showError("ID NOT FOUND", `We couldn't find details for AWB <b>${trackId}</b>.`);
+        }
+      } catch (err) { showError("CONNECTION ERROR", "Tracking gateway is currently unreachable."); }
+    });
+
+    function showError(title, msg) {
+      document.getElementById('loader').innerHTML = `<h3 style='color:var(--navy);margin-top:20px;'>${title}</h3><p>${msg}</p>`;
+    }
+  </script>
+</body>
+
+</html>
+
+
+
+
