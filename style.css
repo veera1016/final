@@ -1155,5 +1155,9 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
 }
 
 .address-box {
-  margin-bottom: 0 !important;
+  margin-bottom: 10px !important; /* reduce space below */
+}
+
+.address-box address {
+  margin-bottom: 5px !important;
 }
