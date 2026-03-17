@@ -770,7 +770,7 @@ input:focus, select:focus, textarea:focus {
    Map & Footer
    ========================= */
 .map-area {
-  padding: 20px 0 80px; /* top reduced, bottom same */
+  padding: 10px 0 80px; /* top reduced, bottom same */
   background: var(--card);
   text-align: center;
 }
