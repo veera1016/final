@@ -1153,3 +1153,11 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
 .address-box::before {
   display: none !important;
 }
+section {
+  padding: 40px 0 !important;   /* reduce top & bottom space */
+  margin: 0 !important;
+}
+
+.address-box {
+  margin-bottom: 0 !important;
+}
