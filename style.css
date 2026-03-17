@@ -785,8 +785,8 @@ input:focus, select:focus, textarea:focus {
 #site-footer {
   background: #07101d;
   color: #9aa6b2;
-  padding: 40px 0;
-  margin-top: 40px;
+  padding: 25px 0;  /* reduced */
+  margin-top: 20px; /* reduced */
 }
 
 .footer-grid {
