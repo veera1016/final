@@ -1158,3 +1158,13 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
 .address-box br:last-child {
   display: none;
 }
+
+.hero,
+.hero * {
+  pointer-events: auto;
+}
+
+.hero::before,
+.hero::after {
+  pointer-events: none;
+}
