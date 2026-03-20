@@ -1159,8 +1159,11 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
   display: none;
 }
 
-a, button {
-  position: relative;
-  z-index: 9999;
+.hero-section, .banner, .container {
+  pointer-events: none;
+}
+
+.hero-section a,
+.hero-section button {
   pointer-events: auto;
 }
