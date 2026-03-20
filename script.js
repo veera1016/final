@@ -259,39 +259,23 @@
   /* =========================
      Smooth internal link scrolling
      ========================= */
-function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener("click", function(e) {
-
-      const href = this.getAttribute("href");
-      if (!href || href === "#") return;
-
+  function initSmoothScroll() {
+    document.addEventListener("click", e => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute("href");
+      if (!href || href === "#" || href === "#0") return;
       const target = document.querySelector(href);
       if (!target) return;
-
       e.preventDefault();
       target.scrollIntoView({ behavior: "smooth", block: "start" });
-
+      history.replaceState(null, "", href);
+      // move focus for accessibility
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+      target.removeAttribute("tabindex");
     });
-  });
-}
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-
-    const href = a.getAttribute("href");
-    if (!href || href === "#") return;
-
-    const target = document.querySelector(href);
-    if (!target) return;
-
-    // ✅ FIX: remove preventDefault issue
-    try {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    } catch (err) {
-      window.location.hash = href;
-    }
-  });
-}
+  }
 
   /* =========================
      Pickup form -> WhatsApp
