@@ -1159,12 +1159,8 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
   display: none;
 }
 
-.hero,
-.hero * {
+a, button {
+  position: relative;
+  z-index: 9999;
   pointer-events: auto;
-}
-
-.hero::before,
-.hero::after {
-  pointer-events: none;
 }
