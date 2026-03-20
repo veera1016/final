@@ -513,3 +513,159 @@ window.deleteId = (id) => {
     localStorage.setItem('skyExpressData', JSON.stringify(trackingData));
     location.reload();
 };
+
+/* =========================
+   FIX FOR MI, VIVO, OPPO DEVICES - BUTTON HANDLERS
+   ========================= */
+
+// Global functions for button clicks
+window.handleRequestPickup = function(e) {
+  // Prevent any default behavior
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  console.log('Request Pickup button clicked - MI/Vivo/Oppo fix');
+  
+  // Add visual feedback
+  const btn = document.getElementById('requestPickupBtn');
+  if (btn) {
+    btn.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+      btn.style.transform = 'translateZ(0)';
+    }, 150);
+  }
+  
+  // Scroll to pickup section smoothly
+  const pickupSection = document.getElementById('pickup');
+  if (pickupSection) {
+    pickupSection.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
+    
+    // Update URL without causing page reload
+    history.pushState(null, null, '#pickup');
+    
+    // Focus on first form field for accessibility
+    setTimeout(() => {
+      const firstInput = pickupSection.querySelector('input, textarea, select');
+      if (firstInput) firstInput.focus();
+    }, 500);
+  } else {
+    // Fallback
+    window.location.href = '#pickup';
+  }
+  
+  return false;
+};
+
+window.handleTrackStatus = function(e) {
+  // Prevent any default behavior
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  console.log('Track Status button clicked - MI/Vivo/Oppo fix');
+  
+  // Add visual feedback
+  const btn = document.getElementById('trackStatusBtn');
+  if (btn) {
+    btn.style.transform = 'scale(0.98)';
+    setTimeout(() => {
+      btn.style.transform = 'translateZ(0)';
+    }, 150);
+  }
+  
+  // Scroll to tracking section smoothly
+  const trackingSection = document.getElementById('tracking');
+  if (trackingSection) {
+    trackingSection.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
+    
+    // Update URL without causing page reload
+    history.pushState(null, null, '#tracking');
+    
+    // Focus on tracking input field
+    setTimeout(() => {
+      const trackingInput = document.getElementById('tracking-number');
+      if (trackingInput) trackingInput.focus();
+    }, 500);
+  } else {
+    // Fallback
+    window.location.href = '#tracking';
+  }
+  
+  return false;
+};
+
+// Additional fix: Ensure buttons work after dynamic content loading
+document.addEventListener('DOMContentLoaded', function() {
+  // Double-check buttons exist and add extra touch event listeners
+  const requestBtn = document.getElementById('requestPickupBtn');
+  const trackBtn = document.getElementById('trackStatusBtn');
+  
+  if (requestBtn) {
+    // Remove any conflicting attributes
+    requestBtn.removeAttribute('href');
+    requestBtn.setAttribute('type', 'button');
+    
+    // Add touchstart event for better response on mobile
+    requestBtn.addEventListener('touchstart', function(e) {
+      // Just to ensure the touch is registered
+      console.log('Touchstart on request button');
+    }, { passive: false });
+  }
+  
+  if (trackBtn) {
+    // Remove any conflicting attributes
+    trackBtn.removeAttribute('href');
+    trackBtn.setAttribute('type', 'button');
+    
+    // Add touchstart event for better response on mobile
+    trackBtn.addEventListener('touchstart', function(e) {
+      console.log('Touchstart on track button');
+    }, { passive: false });
+  }
+  
+  // Special handling for MIUI browsers
+  const isMiui = /MiuiBrowser|XiaoMi|Miui/.test(navigator.userAgent);
+  if (isMiui) {
+    console.log('MIUI browser detected - applying special fixes');
+    const allButtons = document.querySelectorAll('.btn-main, .btn-secondary');
+    allButtons.forEach(btn => {
+      btn.style.webkitTransform = 'translateZ(0)';
+      btn.style.transform = 'translateZ(0)';
+      btn.style.backfaceVisibility = 'hidden';
+      
+      // Force repaint on MIUI
+      btn.addEventListener('touchstart', function() {
+        this.style.webkitTransform = 'scale(0.98)';
+        setTimeout(() => {
+          this.style.webkitTransform = 'translateZ(0)';
+        }, 100);
+      });
+    });
+  }
+});
+
+// Also ensure the tracking form works properly
+if (document.querySelector('.tracking-form')) {
+  const trackingForm = document.querySelector('.tracking-form');
+  if (trackingForm) {
+    trackingForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const trackingNumber = document.getElementById('tracking-number');
+      if (trackingNumber && trackingNumber.value.trim()) {
+        window.location.href = 'tracking.html?id=' + encodeURIComponent(trackingNumber.value.trim());
+      } else {
+        alert('Please enter a tracking number');
+      }
+      return false;
+    });
+  }
+}
