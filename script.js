@@ -259,23 +259,25 @@
   /* =========================
      Smooth internal link scrolling
      ========================= */
-  function initSmoothScroll() {
-    document.addEventListener("click", e => {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
-      const href = a.getAttribute("href");
-      if (!href || href === "#" || href === "#0") return;
-      const target = document.querySelector(href);
-      if (!target) return;
-      e.preventDefault();
+function initSmoothScroll() {
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+
+    const href = a.getAttribute("href");
+    if (!href || href === "#") return;
+
+    const target = document.querySelector(href);
+    if (!target) return;
+
+    // ✅ FIX: remove preventDefault issue
+    try {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
-      history.replaceState(null, "", href);
-      // move focus for accessibility
-      target.setAttribute("tabindex", "-1");
-      target.focus({ preventScroll: true });
-      target.removeAttribute("tabindex");
-    });
-  }
+    } catch (err) {
+      window.location.hash = href;
+    }
+  });
+}
 
   /* =========================
      Pickup form -> WhatsApp
