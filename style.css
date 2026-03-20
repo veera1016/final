@@ -1159,4 +1159,70 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
   display: none;
 }
 
+/* =========================
+   CRITICAL FIXES FOR MI, VIVO, OPPO DEVICES
+   ========================= */
+
+/* Fix for buttons on Chinese Android devices */
+.btn-main,
+.btn-secondary,
+button,
+[role="button"] {
+  cursor: pointer;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
+  
+  /* Force hardware acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
+  /* Ensure clickability */
+  position: relative;
+  z-index: 10;
+  pointer-events: auto !important;
+}
+
+/* Remove hover effects on touch devices */
+@media (hover: hover) {
+  .btn-main:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (hover: none) {
+  .btn-main:hover {
+    transform: none;
+  }
+}
+
+/* Active state for better touch feedback */
+.btn-main:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.05s ease;
+}
+
+/* Ensure buttons are never disabled or hidden */
+button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Fix for any potential overlay issues */
+.hero-ctas {
+  position: relative;
+  z-index: 20;
+}
+
+.hero-ctas .btn-main {
+  min-width: 160px;
+  text-align: center;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
 
